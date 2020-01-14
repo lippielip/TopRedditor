@@ -5,6 +5,16 @@ let converter = new showdown.Converter();
 let randomNum;
 let posts;
 let comments;
+let html;
+
+/**************************/ 
+/*****User Variables******/
+
+let subreddit= "dankmemes";
+let time = "week";
+
+/**************************/
+
 
 class App extends React.Component {
   constructor(props) {
@@ -12,36 +22,40 @@ class App extends React.Component {
     this.state = {
       post: '',
       topComment:'',
-      isLoading:false,
     };
     this.getNewImage = this.getNewImage.bind(this);
   }
+
   async getNewImage() {
+    document.getElementById("errorDiv").innerHTML=""
     try {
-      document.getElementById("errorDiv").innerHTML=""
-      randomNum = Math.floor(Math.random() * 25);
       //fetch todays top memes from dank memes
-      await fetch(`https://www.reddit.com/r/dankmemes/top.json?t=day`)
+      await fetch(`https://www.reddit.com/r/${subreddit}/top.json?t=${time}`)
         .then(response => response.json())
         .then(data => posts = data.data.children );
-
+        randomNum = Math.floor(Math.random() * posts.length);
       await fetch(`https://www.reddit.com/${posts[randomNum].data.permalink}.json`)
         .then(response => response.json())
         .then(data => comments = data[1].data.children);
-        let html = converter.makeHtml(comments[randomNum].data.body)
-        this.setState({
-          topComment : html,
-          post: posts[randomNum].data});
-          document.getElementById("topComment").innerHTML= html
+      try{
+        html = converter.makeHtml(comments[1].data.body)
+      } catch(error){
+        html = ""
+      }
+      this.setState({
+        topComment : html,
+        post: posts[randomNum].data
+      });
+      document.getElementById("topComment").innerHTML= html
+
       setTimeout(() => {
         this.getNewImage();
-      }, 9000);
+      }, 30000);
     } catch (error) {
-      console.dir(error)
-      document.getElementById("errorDiv").innerHTML="No connection. Retrying..."
+      document.getElementById("errorDiv").innerHTML="Error fetching posts. Retrying..."
       setTimeout(() => {
         this.getNewImage();
-      }, 60000);
+      }, 10000);
     }
   }
 
