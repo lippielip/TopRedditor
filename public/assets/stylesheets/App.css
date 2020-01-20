@@ -5,7 +5,13 @@
   font-size: calc(10px + 2vmin);
   height: 100vh;
   color: white;
+  scrollbar-width: 1px;
+  overflow-x: hidden;
 }
+
+.App::-webkit-scrollbar {
+  display: none;
+ }
 
 .App-header {
   display: flex;
