@@ -13,6 +13,7 @@ let comments;
 let html;
 // variable for the image timeout function => gets reset when saving options
 let imageTimeout;
+let errorTimeout;
 // DOM element for images/videos/gif.....
 let content = document.createElement('img');
 // Reddit Api only gives back 25 posts at once and uses after/before strings to access more content
@@ -49,7 +50,6 @@ class App extends React.Component {
 		// assign content element to a variable => used to append content as children
 		let contentDiv = document.getElementById('contentDiv');
 		//reset Error message in case it exists
-		document.getElementById('errorDiv').innerHTML = '';
 		try {
 			//fetch todays top memes from dank memes when the postNumber is 0 i.e get a new page every 25 posts
 			if (postNumber === 0) {
@@ -100,17 +100,15 @@ class App extends React.Component {
 			} else {
 				postNumber++;
 			}
-
-			imageTimeout = setTimeout(() => {
-				this.getNewImage();
-			}, this.state.options.image_duration * 60000);
+			document.getElementById('errorDiv').innerHTML = '';
+			imageTimeout = setTimeout(this.getNewImage, this.state.options.image_duration * 60000);
 		} catch (error) {
+			//reset posts on error
 			postNumber = 0;
 			after = null;
 			document.getElementById('errorDiv').innerHTML = 'Error fetching posts (Check Connection and Subreddit input). Retrying...';
-			setTimeout(() => {
-				this.getNewImage();
-			}, 10000);
+			// 10 second timeout in case an error occured
+			errorTimeout = setTimeout(this.getNewImage, 10000);
 		}
 	}
 
@@ -119,22 +117,23 @@ class App extends React.Component {
 		this.setState({ newOptions: options });
 	}
 
-	toggleCollapse (e) {
+	async toggleCollapse (e) {
 		//when collapse is closed and settings have changed =>  save changes
 		if (e.target.attributes[4].nodeValue === 'false' && JSON.stringify(this.state.options) !== JSON.stringify(this.state.newOptions)) {
 			// create deep copy of state
 			// this is required because directly assigning newOptions would just make options point to newOptions instead of copying the attributes
 			let newOptionCopy = JSON.parse(JSON.stringify(this.state.newOptions));
 			// set new options
-			this.setState({ options: newOptionCopy });
-			// reset currently running slideshow timer
-			clearTimeout(imageTimeout);
+			this.setState({ options: await newOptionCopy });
+			// reset currently running slideshow timer ..... seems to not clear correctly every time => added await for testing... seems to work for now
+			clearTimeout(await imageTimeout);
+			clearTimeout(await errorTimeout);
 			// reset postnumber
 			postNumber = 0;
 			// reset pagination
 			after = null;
 			// run page getter loop again
-			this.getNewImage();
+			await this.getNewImage();
 		}
 	}
 
@@ -158,12 +157,12 @@ class App extends React.Component {
 						Options
 					</button>
 					<Options changeOptionState={this.changeOptionState} submittedOptions={this.state.options} />
-					<h2>{this.state.post.title}</h2>
+					<h2 className="App-spacer">{this.state.post.title}</h2>
 				</header>
 				<div className="App-body">
 					<div id="contentDiv" className="App-body" />
-					<div id="topComment" />
-					<div id="errorDiv" />
+					<div id="topComment" className="App-spacer" />
+					<div id="errorDiv" className="App-spacer" />
 				</div>
 			</div>
 		);
