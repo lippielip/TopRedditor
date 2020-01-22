@@ -14,6 +14,8 @@ let html;
 // variable for the image timeout function => gets reset when saving options
 let imageTimeout;
 let errorTimeout;
+// list for keeping track of running timeouts
+let timeoutList = [];
 // DOM element for images/videos/gif.....
 let content = document.createElement('img');
 // Reddit Api only gives back 25 posts at once and uses after/before strings to access more content
@@ -47,6 +49,10 @@ class App extends React.Component {
 	}
 	// main function for getting new images / content
 	async getNewImage () {
+		// clear last timeout so id does not happen again
+		clearTimeout(timeoutList[0]);
+		// remove timeout from the timeoutList
+		timeoutList.pop();
 		// assign content element to a variable => used to append content as children
 		let contentDiv = document.getElementById('contentDiv');
 		//reset Error message in case it exists
@@ -101,14 +107,14 @@ class App extends React.Component {
 				postNumber++;
 			}
 			document.getElementById('errorDiv').innerHTML = '';
-			imageTimeout = setTimeout(this.getNewImage, this.state.options.image_duration * 60000);
+			timeoutList.push((imageTimeout = setTimeout(this.getNewImage, this.state.options.image_duration * 60000)));
 		} catch (error) {
 			//reset posts on error
 			postNumber = 0;
 			after = null;
 			document.getElementById('errorDiv').innerHTML = 'Error fetching posts (Check Connection and Subreddit input). Retrying...';
 			// 10 second timeout in case an error occured
-			errorTimeout = setTimeout(this.getNewImage, 10000);
+			timeoutList.push((errorTimeout = setTimeout(this.getNewImage, 10000)));
 		}
 	}
 
@@ -126,8 +132,8 @@ class App extends React.Component {
 			// set new options
 			this.setState({ options: await newOptionCopy });
 			// reset currently running slideshow timer ..... seems to not clear correctly every time => added await for testing... seems to work for now
-			clearTimeout(await imageTimeout);
-			clearTimeout(await errorTimeout);
+			clearTimeout(imageTimeout);
+			clearTimeout(errorTimeout);
 			// reset postnumber
 			postNumber = 0;
 			// reset pagination
