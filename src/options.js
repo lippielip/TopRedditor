@@ -57,7 +57,7 @@ class Options extends React.Component {
 	render () {
 		return (
 			<div className="collapse" id="optionCollapse">
-				<div className="card card-body bg-dark" style={{width:"40vw"}}>
+				<div className="card card-body bg-dark">
 					<input
 						type="text"
 						className="form-control"
