@@ -68,6 +68,7 @@ class Options extends React.Component {
 							onChange={this.changeOptions}
 						/>
 						<div className="dropdown">
+							<span>Time: </span>
 							<button className="btn btn-secondary dropdown-toggle" type="button" id="time" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Sort posts by time
 							</button>
@@ -93,6 +94,7 @@ class Options extends React.Component {
 							</div>
 						</div>
 						<div className="dropdown">
+						<span>Category: </span>
 							<button className="btn btn-secondary dropdown-toggle" type="button" id="sort_category" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Sort posts by category
 							</button>
