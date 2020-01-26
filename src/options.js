@@ -57,73 +57,75 @@ class Options extends React.Component {
 	render () {
 		return (
 			<div className="collapse" id="optionCollapse">
-				<div className="card card-body bg-dark App-options">
-					<input
-						type="text"
-						className="form-control"
-						category="subreddit"
-						placeholder={this.props.submittedOptions.subreddit}
-						aria-label="Subreddit"
-						onChange={this.changeOptions}
-					/>
-					<div className="dropdown">
-						<button className="btn btn-secondary dropdown-toggle" type="button" id="time" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Sort posts by time
-						</button>
-						<div className="dropdown-menu" category="time" aria-labelledby="time">
-							<button className="dropdown-item" onClick={this.changeOptions} value="now">
-								now
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="day">
-								day
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="week">
-								week
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="month">
-								month
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="year">
-								year
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="all">
-								all
-							</button>
-						</div>
-					</div>
-					<div className="dropdown">
-						<button className="btn btn-secondary dropdown-toggle" type="button" id="sort_category" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Sort posts by category
-						</button>
-						<div className="dropdown-menu" category="sort_category" aria-labelledby="sort_category">
-							<button className="dropdown-item" onClick={this.changeOptions} value="new">
-								new
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="top">
-								top
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="rising">
-								rising
-							</button>
-							<button className="dropdown-item" onClick={this.changeOptions} value="hot">
-								hot
-							</button>
-						</div>
-					</div>
-					<div className="slidecontainer">
+				<div className="card card-body bg-dark">
+					<div className="App-options">
 						<input
-							type="range"
-							min="0.05"
-							step="0.05"
-							max="60"
-							defaultValue={this.props.submittedOptions.image_duration}
-							className="slider"
-							id="duration"
-							category="image_duration"
+							type="text"
+							className="form-control"
+							category="subreddit"
+							placeholder={this.props.submittedOptions.subreddit}
+							aria-label="Subreddit"
 							onChange={this.changeOptions}
 						/>
-						<br />
-						<label id="sliderValue" />
+						<div className="dropdown">
+							<button className="btn btn-secondary dropdown-toggle" type="button" id="time" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Sort posts by time
+							</button>
+							<div className="dropdown-menu" category="time" aria-labelledby="time">
+								<button className="dropdown-item" onClick={this.changeOptions} value="now">
+									now
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="day">
+									day
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="week">
+									week
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="month">
+									month
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="year">
+									year
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="all">
+									all
+								</button>
+							</div>
+						</div>
+						<div className="dropdown">
+							<button className="btn btn-secondary dropdown-toggle" type="button" id="sort_category" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Sort posts by category
+							</button>
+							<div className="dropdown-menu" category="sort_category" aria-labelledby="sort_category">
+								<button className="dropdown-item" onClick={this.changeOptions} value="new">
+									new
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="top">
+									top
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="rising">
+									rising
+								</button>
+								<button className="dropdown-item" onClick={this.changeOptions} value="hot">
+									hot
+								</button>
+							</div>
+						</div>
+						<div className="slidecontainer">
+							<input
+								type="range"
+								min="0.05"
+								step="0.05"
+								max="60"
+								defaultValue={this.props.submittedOptions.image_duration}
+								className="slider"
+								id="duration"
+								category="image_duration"
+								onChange={this.changeOptions}
+							/>
+							<br />
+							<label id="sliderValue" />
+						</div>
 					</div>
 				</div>
 			</div>
