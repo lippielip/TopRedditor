@@ -61,13 +61,13 @@ class Options extends React.Component {
 					<div className="App-options">
 						<input
 							type="text"
-							className="form-control"
+							className="form-control App-spacer"
 							category="subreddit"
 							placeholder={this.props.submittedOptions.subreddit}
 							aria-label="Subreddit"
 							onChange={this.changeOptions}
 						/>
-						<div className="dropdown">
+						<div className="dropdown App-spacer">
 							<span>Time: </span>
 							<button className="btn btn-secondary dropdown-toggle" type="button" id="time" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Sort posts by time
@@ -93,7 +93,7 @@ class Options extends React.Component {
 								</button>
 							</div>
 						</div>
-						<div className="dropdown">
+						<div className="dropdown App-spacer">
 						<span>Category: </span>
 							<button className="btn btn-secondary dropdown-toggle" type="button" id="sort_category" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Sort posts by category
