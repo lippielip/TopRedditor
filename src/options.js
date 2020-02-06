@@ -1,5 +1,8 @@
 import React from 'react';
 import fetchSubreddits from './fetchSubreddits';
+import autocomplete from './autocomplete';
+
+let subreddits = []
 
 class Options extends React.Component {
 	constructor (props) {
@@ -16,6 +19,7 @@ class Options extends React.Component {
 	}
 
 	changeOptions = async (e) => {
+		subreddits = []
 		let optionCopy = this.state.option;
 		if (e.target.type === 'submit') {
 			optionCopy[e.target.parentNode.attributes.category.nodeValue] = e.target.value;
@@ -38,9 +42,14 @@ class Options extends React.Component {
 			}
 		}
 		if (e.target.type === 'text') {
-			let subreddits = e.target.value;
-			console.dir(await fetchSubreddits(subreddits));
+			let subreddit = e.target.value;
+			let subredditObject = await fetchSubreddits(subreddit);
+			let keys = Object.keys(subredditObject.subreddits)
+			for (const key of keys) {
+				subreddits.push(subredditObject.subreddits[key].name)
+			}
 		}
+		autocomplete(document.getElementById("autofillInput"), subreddits)
 	};
 
 	componentDidMount () {
@@ -59,14 +68,17 @@ class Options extends React.Component {
 			<div className="collapse" id="optionCollapse">
 				<div className="card card-body bg-dark">
 					<div className="App-options">
+						<div className="autocomplete">
 						<input
 							type="text"
 							className="form-control App-spacer"
+							id="autofillInput"
 							category="subreddit"
 							placeholder={this.props.submittedOptions.subreddit}
 							aria-label="Subreddit"
 							onChange={this.changeOptions}
 						/>
+						</div>
 						<div className="dropdown App-spacer">
 							<span>Time: </span>
 							<button className="btn btn-secondary dropdown-toggle" type="button" id="time" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
