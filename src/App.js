@@ -1,6 +1,7 @@
 import React from 'react';
 import Options from './options';
 import showdown from 'showdown';
+import $ from 'jquery';
 // html converter to correctly display comments with markdown formatting
 let converter = new showdown.Converter();
 // counter for going through posts
@@ -23,24 +24,24 @@ let content = document.createElement('img');
 let after = null;
 
 class App extends React.Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {
-			post: '',
+			post       : '',
 			// current scroll options
-			options: {
-				subreddit: 'dankmemes',
-				time: 'now',
-				sort_category: 'new',
+			options    : {
+				subreddit      : 'dankmemes',
+				time           : 'now',
+				sort_category  : 'new',
 				// duration in minutes
-				image_duration: 0.2
+				image_duration : 0.2
 			},
 			// object for caching options before actually committing them
-			newOptions: {
-				subreddit: '',
-				time: '',
-				sort_category: '',
-				image_duration: ''
+			newOptions : {
+				subreddit      : '',
+				time           : '',
+				sort_category  : '',
+				image_duration : ''
 			}
 		};
 		this.getNewImage = this.getNewImage.bind(this);
@@ -48,7 +49,7 @@ class App extends React.Component {
 		this.toggleCollapse = this.toggleCollapse.bind(this);
 	}
 	// main function for getting new images / content
-	async getNewImage () {
+	async getNewImage() {
 		// clear last timeout so id does not happen again
 		clearTimeout(timeoutList[0]);
 		// remove timeout from the timeoutList
@@ -75,7 +76,7 @@ class App extends React.Component {
 				html = '';
 			}
 			this.setState({
-				post: posts.children[postNumber].data
+				post : posts.children[postNumber].data
 			});
 			// remove old element to allow other types of content WIP => videos and text not working yet
 			content.remove();
@@ -119,11 +120,11 @@ class App extends React.Component {
 	}
 
 	//get values from options file and insert them in state
-	changeOptionState (options) {
+	changeOptionState(options) {
 		this.setState({ newOptions: options });
 	}
 
-	async toggleCollapse (e) {
+	async toggleCollapse(e) {
 		//when collapse is closed and settings have changed =>  save changes
 		if (e.target.attributes[4].nodeValue === 'false' && JSON.stringify(this.state.options) !== JSON.stringify(this.state.newOptions)) {
 			// create deep copy of state
@@ -142,16 +143,35 @@ class App extends React.Component {
 			await this.getNewImage();
 		}
 	}
+	hideAfterInactivity() {
+		let interval = 1;
 
-	async componentDidMount () {
-		// start fetching images
-		await this.getNewImage();
+		setInterval(function() {
+			if (interval === 2 && !document.getElementById('optionCollapse').className.includes('show')) {
+				/* if intervall reaches 5 the user is inactive hide element/s */
+				$('header').addClass('inactivity');
+				interval = 1;
+			}
+			interval = interval + 1;
+		}, 1000);
+
+		$(document).bind('mousemove keypress', function() {
+			/* on mousemove or keypressed show the hidden input (user active) */
+			$('header').removeClass('inactivity');
+			interval = 1;
+		});
 	}
 
-	render () {
+	async componentDidMount() {
+		// start fetching images
+		await this.getNewImage();
+		this.hideAfterInactivity();
+	}
+
+	render() {
 		return (
 			<div className="App">
-				<header className="App-header">
+				<header id="header" className="App-header transition">
 					<button
 						className="btn btn-primary"
 						type="button"
@@ -159,13 +179,14 @@ class App extends React.Component {
 						data-target="#optionCollapse"
 						aria-expanded="false"
 						aria-controls="optionCollapse"
-						onClick={this.toggleCollapse}>
+						onClick={this.toggleCollapse}
+					>
 						Options
 					</button>
 					<Options changeOptionState={this.changeOptionState} submittedOptions={this.state.options} />
-					<h2 className="App-spacer">{this.state.post.title}</h2>
 				</header>
 				<div className="App-body">
+					<h2 className="App-title">{this.state.post.title}</h2>
 					<div id="contentDiv" className="App-body" />
 					<div id="topComment" className="App-spacer" />
 					<div id="errorDiv" className="App-spacer" />

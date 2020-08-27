@@ -6,7 +6,7 @@
 	height: 100vh;
 	color: white;
 	scrollbar-width: 1px;
-	overflow-x: hidden;
+	overflow: hidden;
 }
 
 .App::-webkit-scrollbar {
@@ -22,8 +22,14 @@
 
 .App-spacer {
 	font-size: calc(10px + 2vmin);
-	margin-top: 2vh;
-	margin-bottom: 2vh;
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+
+.App-title {
+	font-size: calc(10px + 2vmin);
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .App-content {
@@ -52,13 +58,13 @@
 	/*the container must be positioned relative:*/
 	position: relative;
 	display: inline-block;
-  }
+	width: 100%;
+}
 
 .autocomplete-items {
 	position: absolute;
-	border: 1px solid #d4d4d4;
-	font-size: 1.5vw;
-	color:black;
+	font-size: 1vw;
+	color: black;
 	border-bottom: none;
 	border-top: none;
 	z-index: 99;
@@ -66,19 +72,42 @@
 	top: 100%;
 	left: 0;
 	right: 0;
-  }
+}
 .autocomplete-items div {
 	cursor: pointer;
 	background-color: #fff;
 	border-bottom: 1px solid #d4d4d4;
 	height: calc(10px + 2vmin);
-  }
+}
+.autocomplete-items div:first-child {
+	border-top-right-radius: 0.25rem;
+	border-top-left-radius: 0.25rem;
+}
+
+.autocomplete-items div:last-child {
+	border-bottom-right-radius: 0.25rem;
+	border-bottom-left-radius: 0.25rem;
+}
+
 .autocomplete-items div:hover {
 	/*when hovering an item:*/
 	background-color: #e9e9e9;
-  }
+}
 .autocomplete-active {
 	/*when navigating through the items using the arrow keys:*/
 	background-color: DodgerBlue !important;
 	color: #ffffff;
-  }
+}
+.justifyEvenly {
+	justify-content: space-evenly;
+}
+
+.inactivity {
+	opacity: 0;
+}
+.transition {
+	transition: opacity 0.3s linear !important;
+}
+.rightMargin20 {
+	margin-right: 20px;
+}
