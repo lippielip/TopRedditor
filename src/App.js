@@ -186,6 +186,11 @@ class App extends React.Component {
 					<Options changeOptionState={this.changeOptionState} submittedOptions={this.state.options} />
 				</header>
 				<div className="App-body">
+					<div className="staticLeft">
+						<div>subreddit: {this.state.options.subreddit}</div>
+						<div>interval: {this.state.options.image_duration < 1 ? this.state.options.image_duration * 60 + ' sec' : this.state.options.image_duration + ' min'}</div>
+						<div>sort by: {this.state.options.sort_category}</div>
+					</div>
 					<h2 className="App-title">{this.state.post.title}</h2>
 					<div id="contentDiv" className="App-body" />
 					<div id="topComment" className="App-spacer" />
